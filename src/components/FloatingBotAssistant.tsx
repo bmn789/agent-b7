@@ -10,7 +10,7 @@ const DRAG_THRESHOLD_PX = 8;
 const EMPTY_BEFORE_BOUNCE_MS = 5000;
 
 export const FLOATING_BOT_SUGGESTIONS = [
-    "Check Barath's skills…",
+    "Send message to Barath…",
     "Meet Barath's best friends…",
     "Explore Barath's projects…",
     "How can I contact Barath?",
