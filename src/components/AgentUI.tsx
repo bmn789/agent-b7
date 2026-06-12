@@ -314,7 +314,6 @@ export const AgentUI = () => {
                     >
                         {[
                             'Change theme',
-                            'Best friends?',
                             'Skills?',
                             'Projects?',
                             'How can I contact you?',

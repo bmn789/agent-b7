@@ -39,7 +39,6 @@ export const toolHandlers = {
         console.log(`[Tools] Calling get_profile_education`);
         return { education: profile.education };
     },
-
     send_slack_message: async ({ message }: { message: string }) => {
         console.log(`[Tools] Calling send_slack_message`);
         const webhookUrl = getSecret("SLACK_WEBHOOK_URL") || process.env.SLACK_WEBHOOK_URL;

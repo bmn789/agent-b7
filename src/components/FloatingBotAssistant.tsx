@@ -11,7 +11,6 @@ const EMPTY_BEFORE_BOUNCE_MS = 5000;
 
 export const FLOATING_BOT_SUGGESTIONS = [
     "Send message to Barath : ",
-    "Meet Barath's best friends…",
     "Explore Barath's projects…",
     "How can I contact Barath?",
 ] as const;
