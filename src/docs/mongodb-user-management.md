@@ -21,21 +21,21 @@ Conversations are stored in the `chats` collection with the following structure:
     { "role": "user", "content": "user message text" },
     { "role": "assistant", "content": "agent response text" }
   ],
-  "expiresAt": "ISODate"
+  "createdAt": "ISODate",
+  "updatedAt": "ISODate"
 }
 ```
 
-## 4. Temporary Data (TTL)
-To manage storage and ensure data is "temporary," we use a **TTL (Time To Live)** index on the `expiresAt` field.
-- **Index**: `db.chats.createIndex({ "expiresAt": 1 }, { expireAfterSeconds: 0 })`
-- **Behavior**: MongoDB automatically deletes documents when the current time reaches the `expiresAt` value.
-- **Default TTL**: History is currently set to expire **24 hours** after the last message.
+## 4. Permanent History (No Expiration)
+To preserve the user's historical conversations, chat history is kept permanently in MongoDB. 
+- There is no TTL (Time To Live) index active on this collection.
+- When the user clears their session, a new session ID is generated on the client, starting a fresh conversation, but the historical data remains saved in MongoDB.
 
 ## 5. API Implementation
 - **POST `/api/chat`**: 
     - Fetches existing history for the `sessionId`.
     - Passes history to the AI model for context.
-    - Saves updated history with a new `expiresAt` timestamp.
+    - Saves updated history, updating the `updatedAt` field and setting `createdAt` on document creation.
 - **GET `/api/chat?sessionId=...`**: 
     - Retrieves stored messages to restore chat history when the user refreshes the page.
 

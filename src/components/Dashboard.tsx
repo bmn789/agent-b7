@@ -17,7 +17,7 @@ interface SessionRow {
     sessionId: string;
     messageCount: number;
     createdAt: string;
-    expiresAt: string;
+    updatedAt: string;
 }
 
 const MERMAID_DIAGRAM = `graph TD
@@ -104,7 +104,7 @@ export const Dashboard = () => {
             return Number.isFinite(t) ? t : -Infinity;
         };
 
-        return [...sessions].sort((a, b) => time(b.expiresAt) - time(a.expiresAt));
+        return [...sessions].sort((a, b) => time(b.updatedAt) - time(a.updatedAt));
     }, [sessions]);
 
     const totalPages = Math.max(1, Math.ceil(sortedSessions.length / SESSIONS_PAGE_SIZE));
@@ -190,7 +190,7 @@ export const Dashboard = () => {
                                     <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Session ID</th>
                                     <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Messages</th>
                                     <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Created</th>
-                                    <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Expires</th>
+                                    <th className="text-left px-6 py-3 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Last Active</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
@@ -228,9 +228,9 @@ export const Dashboard = () => {
                                                 )}
                                             </td>
                                             <td className="px-6 py-3 text-slate-500 dark:text-slate-400 text-xs">
-                                                {moment(s.expiresAt).isValid() ? (
-                                                    <span title={moment(s.expiresAt).format('YYYY-MM-DD HH:mm')}>
-                                                        {moment(s.expiresAt).fromNow()}
+                                                {moment(s.updatedAt).isValid() ? (
+                                                    <span title={moment(s.updatedAt).format('YYYY-MM-DD HH:mm')}>
+                                                        {moment(s.updatedAt).fromNow()}
                                                     </span>
                                                 ) : (
                                                     '—'

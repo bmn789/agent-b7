@@ -16,7 +16,10 @@ export const GET: APIRoute = async () => {
         todayStart.setHours(0, 0, 0, 0);
 
         const todayChats = await db.collection('chats').countDocuments({
-            expiresAt: { $gte: todayStart }
+            $or: [
+                { updatedAt: { $gte: todayStart } },
+                { expiresAt: { $gte: todayStart } }
+            ]
         });
 
         return Response.json({

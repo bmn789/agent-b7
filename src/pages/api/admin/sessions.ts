@@ -7,18 +7,25 @@ export const GET: APIRoute = async () => {
 
         const chatDocs = await db.collection('chats')
             .find({})
-            .sort({ expiresAt: -1 })
+            .sort({ updatedAt: -1, expiresAt: -1 })
             .toArray();
 
         const sessions = chatDocs.map((doc) => {
-            const expiresAt = doc.expiresAt instanceof Date ? doc.expiresAt : new Date(doc.expiresAt);
-            const createdAt = new Date(expiresAt.getTime() - 24 * 60 * 60 * 1000);
+            const expiresAt = doc.expiresAt ? (doc.expiresAt instanceof Date ? doc.expiresAt : new Date(doc.expiresAt)) : null;
+            
+            const updatedAt = doc.updatedAt 
+                ? (doc.updatedAt instanceof Date ? doc.updatedAt : new Date(doc.updatedAt)) 
+                : (expiresAt || new Date());
+                
+            const createdAt = doc.createdAt 
+                ? (doc.createdAt instanceof Date ? doc.createdAt : new Date(doc.createdAt)) 
+                : (expiresAt ? new Date(expiresAt.getTime() - 24 * 60 * 60 * 1000) : new Date());
 
             return {
                 sessionId: doc.sessionId,
                 messageCount: Array.isArray(doc.messages) ? doc.messages.length : 0,
                 createdAt: createdAt.toISOString(),
-                expiresAt: expiresAt.toISOString(),
+                updatedAt: updatedAt.toISOString(),
             };
         });
 

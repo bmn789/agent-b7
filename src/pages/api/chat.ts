@@ -24,27 +24,7 @@ export const GET: APIRoute = async ({ request }) => {
 };
 
 export const POST: APIRoute = async ({ request }) => {
-    const { prompt, sessionId, saveOnly, messages } = await request.json();
-
-    if (saveOnly && sessionId && messages) {
-        try {
-            const { db } = await connectToDatabase();
-            await db.collection('chats').updateOne(
-                { sessionId },
-                {
-                    $set: {
-                        messages: messages,
-                        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
-                    }
-                },
-                { upsert: true }
-            );
-            return Response.json({ ok: true });
-        } catch (err) {
-            console.error("Save History Error:", err);
-            return Response.json({ ok: false }, { status: 500 });
-        }
-    }
+    const { prompt, sessionId } = await request.json();
 
     const apiKey = getSecret("GROQ_API_KEY");
 

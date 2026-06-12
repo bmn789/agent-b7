@@ -27,7 +27,11 @@ export async function connectToDatabase() {
             const db = client.db();
 
             const chatsCollection = db.collection('chats');
-            await chatsCollection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+            try {
+                await chatsCollection.dropIndex("expiresAt");
+            } catch (e) {
+                // Ignore if index doesn't exist
+            }
 
             cachedClient = client;
             cachedDb = db;

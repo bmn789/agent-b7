@@ -16,7 +16,8 @@ export const GET: APIRoute = async ({ request }) => {
         return Response.json({
             sessionId,
             messages: doc?.messages || [],
-            expiresAt: doc?.expiresAt ?? null,
+            createdAt: doc?.createdAt ?? (doc?.expiresAt ? new Date(new Date(doc.expiresAt).getTime() - 24 * 60 * 60 * 1000) : null),
+            updatedAt: doc?.updatedAt ?? doc?.expiresAt ?? null,
         });
     } catch (error: any) {
         return Response.json({ error: error.message }, { status: 500 });
